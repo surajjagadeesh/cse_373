@@ -16,7 +16,6 @@ public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
     private IDictionary<K, V>[] chains;
     private int numPairs;
     private static final double LOAD_FACTOR = 0.75;
-    private static final int MAX_BIN_SIZE = 1000;
 
     // You're encouraged to add extra fields (and helper methods) though!
 
@@ -86,7 +85,7 @@ public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
     	}
     	chains[hashValue].put(key, value);
     	
-    	if (chains[hashValue].size() > MAX_BIN_SIZE || 1.0 * numPairs / chains.length >= LOAD_FACTOR) {
+    	if (1.0 * numPairs / chains.length >= LOAD_FACTOR) { //1.0 in order to cast to double
             resize();
     	}
         

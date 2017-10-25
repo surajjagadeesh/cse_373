@@ -178,7 +178,6 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
     }
 	
     private static class ArrayDictionaryIterator<K, V> implements Iterator<KVPair<K, V>> {
-        // You should not need to change this field, or add any new fields.
         private Pair<K, V>[] pairs;
         private int index;
 

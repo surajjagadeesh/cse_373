@@ -14,7 +14,7 @@ public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
     // You may not change or rename this field: we will be inspecting
     // it using our private tests.
     private IDictionary<K, V>[] chains;
-    private int size;
+    private int numPairs;
     private static final double LOAD_FACTOR = 0.75;
     private static final int MAX_BIN_SIZE = 1000;
 
@@ -22,7 +22,7 @@ public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
 
     public ChainedHashDictionary() {
         chains = makeArrayOfChains(16);
-        size = 0;
+        numPairs = 0;
     }
 
     /**
@@ -82,11 +82,11 @@ public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
     	int hashValue = hashValue(key);
     	ensureArrayDictionary(hashValue);
     	if (!chains[hashValue].containsKey(key)) {
-    	    size++;
+    	    numPairs++;
     	}
     	chains[hashValue].put(key, value);
     	
-    	if (chains[hashValue].size() > MAX_BIN_SIZE || 1.0 * size / chains.length >= LOAD_FACTOR) {
+    	if (chains[hashValue].size() > MAX_BIN_SIZE || 1.0 * numPairs / chains.length >= LOAD_FACTOR) {
             resize();
     	}
         
@@ -98,7 +98,7 @@ public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
     	if (!containsKey(key)) {
     	    throw new NoSuchKeyException();
     	}
-    	size--;
+    	numPairs--;
         return chains[hashValue(key)].remove(key);
     }
 
@@ -112,7 +112,7 @@ public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
 
     @Override
     public int size() {
-        return size;
+        return numPairs;
     }
 
     @Override

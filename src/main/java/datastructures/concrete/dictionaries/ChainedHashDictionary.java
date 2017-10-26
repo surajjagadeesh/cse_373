@@ -1,3 +1,7 @@
+//@author: Suraj Jagadeesh and Allen Putich
+//@date: 10/25/17
+//@class: CSE373
+
 package datastructures.concrete.dictionaries;
 
 import datastructures.concrete.KVPair;
@@ -38,7 +42,11 @@ public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
         return (IDictionary<K, V>[]) new IDictionary[size];
     }
 
-    
+    /**
+     * Returns the element the given key should go in, scaling based on array length
+     * @param key: The key for which you want to find it's element
+     * @return: int corresponding to the element of the array the key should go in
+     */
     private int hashValue(K key) {
     	if (key == null) {
             return 0;
@@ -46,6 +54,10 @@ public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
     	return Math.abs(key.hashCode() % (chains.length - 1));
     }
     
+    /**
+     * Creates a new hashDictionary with double the length, copying
+     * and rehashing all the values in the hashDictionary
+     */
     private void resize() {
     	IDictionary<K, V>[] chainsOld = chains;
     	chains = makeArrayOfChains(chains.length * 2);
@@ -62,13 +74,23 @@ public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
     	}
     }
     
+    /**
+     * If the chains array's given element is null, creates a new
+     * arrayDictionary at that element
+     * @param hashValue: The element for which you want to check
+     */
     private void ensureArrayDictionary(int hashValue) {
     	if (chains[hashValue] == null) {
             chains[hashValue] = new ArrayDictionary();
     	}
     }
     
-    @Override
+    /**
+     * Returns the value for the given key. Throws a NoSuchKeyException if the
+     * key doesn't exist in the hash dictionary
+     * @param key: The key for which value is needed
+     * @return: The value for the specified key
+     */
     public V get(K key) {
     	if (!containsKey(key)) {
     	    throw new NoSuchKeyException();
@@ -76,7 +98,11 @@ public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
         return chains[hashValue(key)].get(key);
     }
 
-    @Override
+    /**
+     * Puts the given key and value into the hashDictionary
+     * @param key: The key for the data that's being put in the hashDictionary
+     * @param value: The value for the data that's being put into the hashDictionary
+     */
     public void put(K key, V value) {
     	int hashValue = hashValue(key);
     	ensureArrayDictionary(hashValue);
@@ -92,7 +118,13 @@ public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
         
     }
 
-    @Override
+    /**
+     * Removes the given key and corresponding value. Throws a NoSuchKeyException
+     * if the key doesn't exist in the hash dictionary
+     * @param key: The key for the key/value pair that is going to be
+     * deleted from the hashDictionary
+     * @return: Returns the value for the given key
+     */
     public V remove(K key) {
     	if (!containsKey(key)) {
     	    throw new NoSuchKeyException();
@@ -101,7 +133,11 @@ public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
         return chains[hashValue(key)].remove(key);
     }
 
-    @Override
+    /**
+     * Checks if the given key is in the chainedHashDictionary
+     * @param key: The key for which is being checked if it is in the hashDictionary
+     * @return: Returns true if the hashDictionary contains the key, false otherwise
+     */
     public boolean containsKey(K key) {
     	if (chains[hashValue(key)] == null) {
             return false;
@@ -109,12 +145,17 @@ public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
         return chains[hashValue(key)].containsKey(key);
     }
 
-    @Override
+    /**
+     * Returns the number of key-value pairs in the hash dictionary
+     * @return: Size of the hash dictionary
+     */
     public int size() {
         return numPairs;
     }
 
-    @Override
+    /**
+    * Returns the iterator for ChainedHashDictionary
+    */
     public Iterator<KVPair<K, V>> iterator() {
         // Note: you do not need to change this method
         return new ChainedIterator<>(this.chains);
@@ -167,6 +208,10 @@ public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
             nestedIterator = findNextIterator();
         }
         
+        /**
+         * Finds the next iterator
+         * @return: Returns the next iterator if there is one, null otherwise
+         */
         private Iterator<KVPair<K, V>> findNextIterator() {
             while (index < chains.length) {
                 if (chains[index] != null) {
@@ -177,7 +222,9 @@ public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
             return null;
         }
 
-        @Override
+        /**
+         * Returns true if there is another array dictionary that is not null, false otherwise
+         */
         public boolean hasNext() {
             if (nestedIterator == null) {
                 return false;
@@ -190,7 +237,9 @@ public class ChainedHashDictionary<K, V> implements IDictionary<K, V> {
             }
         }
 
-        @Override
+        /**
+         * Returns the next KVPair, throws a NoSuchElementException if there isn't one
+         */
         public KVPair<K, V> next() {
             if (!hasNext()) {
             	throw new NoSuchElementException();

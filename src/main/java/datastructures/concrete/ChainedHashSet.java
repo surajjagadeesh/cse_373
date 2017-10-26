@@ -1,3 +1,7 @@
+//@author: Suraj Jagadeesh and Allen Putich
+//@date: 10/25/17
+//@class: CSE373
+
 package datastructures.concrete;
 
 import datastructures.concrete.dictionaries.ChainedHashDictionary;
@@ -18,12 +22,19 @@ public class ChainedHashSet<T> implements ISet<T> {
         this.map = new ChainedHashDictionary<>();
     }
 
-    @Override
+    /**
+     * Adds the given item to the chained hash set
+     * @param item: The item which is going to be added to the hash set
+     */
     public void add(T item) {
         map.put(item, true);
     }
 
-    @Override
+    /**
+     * Removes the given item from the chained hash set. Throws NoSuchElementException
+     * if the item doesn't exist in the hash set.
+     * @param item: The item which is going to be removed from the hash set
+     */
     public void remove(T item) {
     	if (!contains(item)) {
             throw new NoSuchElementException();
@@ -31,17 +42,24 @@ public class ChainedHashSet<T> implements ISet<T> {
         map.remove(item);
     }
 
-    @Override
+    /**
+     * Returns true if the hash set contains the item, false otherwise
+     * @param item: The item that is being checked whether it is in the hash set
+     */
     public boolean contains(T item) {
         return map.containsKey(item);
     }
 
-    @Override
+    /**
+     * Returns the size of the hash set
+     */
     public int size() {
         return map.size();
     }
 
-    @Override
+    /**
+     * Returns the iterator for chained hash set
+     */
     public Iterator<T> iterator() {
         return new SetIterator<>(this.map.iterator());
     }
@@ -54,12 +72,16 @@ public class ChainedHashSet<T> implements ISet<T> {
             this.iter = iter;
         }
 
-        @Override
+        /**
+         * Returns true if the iterator has a next element, false otherwise
+         */
         public boolean hasNext() {
             return iter.hasNext();
         }
 
-        @Override
+        /**
+         * Returns the value of the next item in the ChainedHashSet
+         */
         public T next() {
             return iter.next().getKey();
         }

@@ -1,5 +1,6 @@
-//@author: Suraj Jagadeesh and Maggie Tsang
-//ArrayDictionary class
+//@author: Suraj Jagadeesh and Allen Putich
+//@date: 10/25/17
+//@class: CSE373
 
 package datastructures.concrete.dictionaries;
 
